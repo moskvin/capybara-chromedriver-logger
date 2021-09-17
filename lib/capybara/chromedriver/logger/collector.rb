@@ -22,6 +22,7 @@ module Capybara
         def raise_errors_if_needed!
           return unless Capybara::Chromedriver::Logger.raise_js_errors?
           return if errors.empty?
+          return if errors.map { |error| should_filter?(error) }.compact.empty?
 
           formatted_errors = errors.map(&:to_s)
           error_list = formatted_errors.join("\n")
