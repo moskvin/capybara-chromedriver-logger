@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Capybara
   module Chromedriver
     module Logger
@@ -37,7 +39,7 @@ module Capybara
           light_green: 102,
           light_blue: 103,
           light_magenta: 105,
-          light_cyan: 106,
+          light_cyan: 106
         }.freeze
 
         COLORS = {
@@ -49,7 +51,7 @@ module Capybara
 
         COLOR_MODES = {
           default: 0,
-          bold: 1,
+          bold: 1
         }.freeze
 
         LEADING_SPACES = ' ' * 5
@@ -71,7 +73,7 @@ module Capybara
           colorize(
             " #{level.downcase} ",
             mode: :bold,
-            background: level_color,
+            background: level_color
           )
         end
 
@@ -100,7 +102,7 @@ module Capybara
 
           str = "\033[#{mode_code};#{color_code};#{background_code}m"
           str += msg
-          str + "\033[0m"
+          "#{str}\e[0m"
         end
       end
     end

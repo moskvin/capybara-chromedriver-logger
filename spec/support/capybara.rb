@@ -20,21 +20,24 @@ Capybara.register_driver :selenium do |app|
     --window-size=1600,1200
   ]
 
-  capabilities = Capybara::Chromedriver::Logger.build_capabilities(
-    chromeOptions: {
-      args: args
-    }
-  )
-
-  Capybara::Selenium::Driver.new(
-    app,
+  http_client = Selenium::WebDriver::Remote::Http::Default.new
+  options = Selenium::WebDriver::Chrome::Options.new(args:)
+  options.logging_prefs = { browser: 'ALL' }
+  options.add_preference('w3c', false)
+  driver_options = {
     browser: :chrome,
-    desired_capabilities: capabilities,
-    http_client: client
-  )
+    options:,
+    http_client:,
+    clear_local_storage: true,
+    clear_session_storage: true
+  }
+
+  Capybara::Selenium::Driver.new(app, **driver_options)
 end
 
 Capybara.default_driver = :selenium
+Selenium::WebDriver.logger.level = :info
+Selenium::WebDriver.logger.output = 'selenium.log'
 
 RSpec.configure do |config|
   config.include Capybara::DSL

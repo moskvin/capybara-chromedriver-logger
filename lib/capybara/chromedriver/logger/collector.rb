@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Capybara
   module Chromedriver
     module Logger
@@ -7,7 +9,7 @@ module Capybara
           @log_destination = options[:log_destination] || $stdout
           @filters = options[:filters] || Capybara::Chromedriver::Logger.filters
           @filter_levels = options[:filter_levels] ||
-            Capybara::Chromedriver::Logger.filter_levels
+                           Capybara::Chromedriver::Logger.filter_levels
         end
 
         def flush_and_check_errors!
@@ -33,12 +35,10 @@ module Capybara
         def flush_logs!
           browser_logs.each do |log|
             message = Message.new(log)
-            
             next if should_filter?(message)
 
             errors << message if message.error?
-            
-            log_destination.puts message.to_s
+            log_destination.puts(message.to_s)
           end
         end
 
@@ -54,7 +54,6 @@ module Capybara
           Capybara
             .current_session
             .driver.browser
-            .manage
             .logs
             .get(type)
         end
@@ -71,10 +70,7 @@ module Capybara
           filters.any? { |filter| filter =~ message.message }
         end
 
-        attr_reader :errors
-        attr_reader :filters
-        attr_reader :filter_levels
-        attr_reader :log_destination
+        attr_reader :errors, :filters, :filter_levels, :log_destination
       end
     end
   end

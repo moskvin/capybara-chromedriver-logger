@@ -1,3 +1,9 @@
+# 0.4.0 [June 16, 2023]
+
+* Support Ruby 3.2
+* Support selenium-webdriver 4.9
+* Removed `#build_capabilities` method, please use Selenium WebDriver Options instead
+
 # 0.3.0 [March 21, 2020]
 
 * Prevent errors from being raised if they match a filter
