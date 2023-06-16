@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/dbalatero/capybara-chromedriver-logger.svg?branch=master)](https://travis-ci.org/dbalatero/capybara-chromedriver-logger)
+[![Build Status](https://travis-ci.org/moskvin/capybara-chromedriver-logger.svg?branch=master)](https://travis-ci.org/moskvin/capybara-chromedriver-logger)
 
 # capybara-chromedriver-logger
 
@@ -12,23 +12,19 @@ We currently assume you're running:
 
 to handle your JS feature specs. I'd love to expand support for other combinations of test environments!
 
-<img src="https://raw.githubusercontent.com/dbalatero/capybara-chromedriver-logger/master/images/example.png" />
+<img src="https://raw.githubusercontent.com/moskvin/capybara-chromedriver-logger/master/images/example.png"  alt="Logger Example"/>
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'capybara-chromedriver-logger'
+gem 'capybara-chromedriver-logger', github: 'moskvin/capybara-chromedriver-logger'
 ```
 
 And then execute:
 
     $ bundle
-
-Or install it yourself as:
-
-    $ gem install capybara-chromedriver-logger
 
 ## Usage
 
@@ -36,20 +32,12 @@ You'll want to modify your `spec_helper.rb` file to configure Capybara correctly
 
 ```ruby
 Capybara.register_driver(:chrome) do |app|
-  # option 1:
-  # This wraps Selenium::WebDriver::Remote::Capabilities.chrome() with the
-  # correct settings for logging.
-  capabilities = Capybara::Chromedriver::Logger.build_capabilities(
-    chromeOptions: {
-      args: %w[headless]
-    }
-  )
-
-  Capybara::Selenium::Driver.new(
-    app,
-    browser: :chrome,
-    desired_capabilities: capabilities
-  )
+  http_client = Selenium::WebDriver::Remote::Http::Default.new
+  args = %w[headless]
+  options = Selenium::WebDriver::Chrome::Options.new(args:)
+  options.logging_prefs = { browser: 'ALL' }
+  options.add_preference('w3c', false)
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options:, http_client:)
 end
 
 # Use the driver we've configured
@@ -65,29 +53,6 @@ RSpec.configure do |config|
     Capybara::Chromedriver::Logger::TestHooks.after_example!
   end
 end
-```
-
-If you don't want to use the capability wrapper above for any reason, you can
-still manually configure things:
-
-```ruby
-# option 2: manual setup
-# Turn on browser logs
-capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-  chromeOptions: {
-    args: %w[headless],
-    # required for Chrome 75+
-    w3c: false
-  },
-  # For up to Chrome 74
-  loggingPrefs: {
-    browser: 'ALL'
-  }
-  # for Chrome 75+
-  "goog:loggingPrefs" => {
-    browser: 'ALL'
-  }
-)
 ```
 
 ## Configuration
