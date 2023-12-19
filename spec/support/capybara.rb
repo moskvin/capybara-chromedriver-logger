@@ -11,7 +11,7 @@ Capybara.register_driver :selenium do |app|
     disable-infobars
     disable-gpu
     disable-popup-blocking
-    headless
+    --headless=new
     no-default-browser-check
     no-first-run
     no-sandbox
