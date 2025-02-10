@@ -7,6 +7,11 @@ module Capybara
           collector.flush_and_check_errors!
         end
 
+        def self.each_error(&block)
+          collector = Capybara::Chromedriver::Logger::Collector.new
+          collector.each_error(&block)
+        end
+
         def self.for_rspec!
           ::RSpec.configure do |config|
             %i[feature system].each do |type|
