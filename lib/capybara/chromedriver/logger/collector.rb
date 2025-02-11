@@ -12,6 +12,12 @@ module Capybara
                            Capybara::Chromedriver::Logger.filter_levels
         end
 
+        def each_error(&block)
+          flush_logs!
+          @errors.each(&block)
+          clear_errors!
+        end
+
         def flush_and_check_errors!
           flush_logs!
 
